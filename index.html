@@ -93,6 +93,91 @@
     /* Form Settings */
     .box-settings { max-width: 500px; margin: 40px auto; background: #1e1e1e; padding: 30px; border-radius: 10px; border: 1px solid #333; }
     .input-premium { width: 90%; padding: 12px; margin-bottom: 15px; background: #2d2d2d; color: white; border: 1px solid #444; border-radius: 6px; }
+    .hero-section {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: linear-gradient(180deg, #1f1f1f 0%, #121212 100%);
+      border-bottom: 1px solid #333;
+      margin-bottom: 40px;
+    }
+    .hero-section h1 { font-size: 2.8rem; margin: 0 0 10px 0; color: #fff; font-weight: 900; letter-spacing: -1px; }
+    .hero-section h1 span { color: #007bff; }
+    .hero-section p { color: #8696a0; font-size: 1.1rem; margin: 0; }
+
+    .katalog-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 80px 20px;
+    }
+    .grid-mobil {
+      display: grid;
+      /* Auto responsive: di HP 1 kolom, di PC bisa 3-4 kolom */
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    .card-mobil {
+      background-color: #1a1a1a;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #2a2a2a;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-mobil:hover {
+      transform: translateY(-8px);
+      border-color: #007bff;
+      box-shadow: 0 12px 24px rgba(0, 123, 255, 0.15);
+    }
+    .card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .card-body {
+      padding: 22px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+      color: #ffffff;
+    }
+    .card-price {
+      font-size: 1.2rem;
+      color: #00a884; /* Warna hijau neon ala harga elit */
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+    .spek-badge {
+      background: #2a2a2a;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #bbb;
+      font-weight: 600;
+    }
+    .btn-detail {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-detail:hover { background: #0056b3; }
   </style>
 </head>
 <body>
@@ -135,7 +220,7 @@
 
   <div id="view-aplikasi" style="display: none;">
     
-    <!-- NAVBAR YANG UDAH DIBENERIN & DITUTUP -->
+    <!-- NAVBAR PREMIUM -->
     <nav class="navigasi" style="position: fixed; top: 0; left: 0; width: 100vw; height: 70px; display: flex; justify-content: space-between; align-items: center; background-color: #1f1f1f; padding: 0 40px; box-sizing: border-box; z-index: 1000; border-bottom: 1px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
       <div class="Logo-brand" id="brand-home" style="color: #007bff; font-size: 22px; font-weight: 900; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;">GARASI SPORT</div>
       
@@ -148,72 +233,91 @@
           <div class="profil-wrapper">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" class="avatar-profil" id="btn-avatar" alt="Profil">
             <div class="dropdown-menu" id="dropdown-box">
-              <div class="dropdown-item" id="drop-chat">Ruang Chat Pribadi</div>
-              <div class="dropdown-item" id="drop-settings">Account Info & Settings</div>
-              <div class="dropdown-item" id="drop-katalog">Kembali ke Katalog</div>
+              <div class="dropdown-item" id="drop-chat">💬 Ruang Chat Pribadi</div>
+              <div class="dropdown-item" id="drop-settings">⚙️ Account Info & Settings</div>
+              <div class="dropdown-item" id="drop-katalog">🚗 Kembali ke Katalog</div>
             </div>
           </div>
         </div>
       </div>
-    </nav> <!-- INI DIA PENUTUPNYA BRAY! -->
+    </nav>
 
     <!-- PENDORONG KONTEN BIAR GAK KETUTUP NAVBAR -->
     <div style="height: 70px; width: 100%;"></div>
 
     <div class="container">
-      
-      <div id="sub-katalog">
-        <h2 style="text-align: center; margin-bottom: 30px;">BMW blm adaa wkwk</h2>
-        <div class="katalog">
-          
-          <div class="kartu-mobil">
-            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500" class="foto-mobil">
-            <h3>Porsche 911 GT3</h3>
-            <p style="color: #007bff; font-weight: bold;">when yah</p>
-            <div class="grup-tombol">
-              <button class="btn-aksi btn-detail" 
-                data-nama="Porsche 911 GT3 RS" 
-                data-harga="Rp 4.5 Milyar" 
-                data-foto="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800" 
-                data-deskripsi="Porsche 911 GT3 adalah perwujudan mobil balap murni yang legal digunakan di jalan raya. Dipersenjatai mesin silinder flat-6 berkapasitas 4.0L naturally aspirated, monster ini mampu melontarkan daya sebesar 518 Horsepower. Melesat dari 0 hingga 100 km/jam hanya butuh waktu 3.2 detik dengan raungan mesin khas sirkuit hingga 9.000 RPM!">Lihat Detail</button>
-              <button class="btn-aksi btn-beli" onclick="alert('Pesanan diteruskan ke Finance!')">Beli Sekarang</button>
-              <button class="btn-aksi btn-chat" id="btn-porsche-chat">Chat Penjual</button>
-            </div>
-          </div>
+    
+      <!-- ==============================================
+           1. HALAMAN KATALOG (Desain Baru)
+           ============================================== -->
+      <div id="sub-katalog" style="display: block;">
+        <div class="hero-section">
+          <h1>Koleksi <span>Premium</span></h1>
+          <p>Temukan sport car impianmu. (Pokoknya harus Porsche!)</p>
+        </div>
 
-          <div class="kartu-mobil">
-            <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=500" class="foto-mobil">
-            <h3>Nissan GTR R35</h3>
-            <p style="color: #007bff; font-weight: bold;">gasuka </p>
-            <div class="grup-tombol">
-              <button class="btn-aksi btn-detail" 
-                data-nama="Nissan GTR R35 Godzilla" 
-                data-harga="Rp 3.2 Milyar" 
-                data-foto="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800" 
-                data-deskripsi="Dijuluki sebagai sang 'Godzilla' dari Jepang, Nissan GTR R35 mengandalkan mesin Twin-Turbo V6 VR38DETT berkapasitas 3.8 liter yang sangat legendaris. Dilengkapi sistem penggerak pintar ATTESA E-TS All-Wheel Drive, mobil ini sanggup memuntahkan tenaga 565 HP dengan kestabilan cornering yang luar biasa tajam di segala cuaca.">Lihat Detail</button>
-              <button class="btn-aksi btn-beli" onclick="alert('Pesanan diteruskan ke Finance!')">Beli Sekarang</button>
-              <button class="btn-aksi btn-chat" id="btn-gtr-chat">Chat Penjual</button>
+        <div class="katalog-container">
+          <div class="grid-mobil">
+            
+            <!-- MOBIL 1: PORSCHE -->
+            <div class="card-mobil">
+              <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80" class="card-img" alt="Porsche">
+              <div class="card-body">
+                <h3 class="card-title">Porsche 911 GT3 RS</h3>
+                <div class="card-price">Rp 10.500.000.000</div>
+                <div class="card-footer">
+                  <span class="spek-badge">V8 Biturbo</span>
+                  <!-- Tombol ini udah dihubungin ke JS lu -->
+                  <button class="btn-detail" 
+                    data-nama="Porsche 911 GT3 RS" 
+                    data-harga="Rp 10.5 Milyar" 
+                    data-foto="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80" 
+                    data-deskripsi="Porsche 911 GT3 adalah perwujudan mobil balap murni. Mobil favorit bos pokoknya harga mati!">Lihat Detail</button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="kartu-mobil">
-            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=500" class="foto-mobil">
-            <h3>Corvette C8</h3>
-            <p style="color: #007bff; font-weight: bold;">apalgi ini,sukanya porsche</p>
-            <div class="grup-tombol">
-              <button class="btn-aksi btn-detail" 
-                data-nama="Chevrolet Corvette C8 Mid-Engine" 
-                data-harga="Rp 2.9 Milyar" 
-                data-foto="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800" 
-                data-deskripsi="Chevrolet Corvette C8 mencetak sejarah baru dengan mengadopsi konfigurasi letak mesin tengah (Mid-Engine) layaknya supercar elit Eropa. Menggendong mesin LT2 6.2L V8 naturally aspirated, C8 memproduksi daya 495 HP. Desain eksteriornya sangat aerodinamis dipadu interior mewah futuristik mirip kokpit pesawat jet tempur siluman.">Lihat Detail</button>
-              <button class="btn-aksi btn-beli" onclick="alert('Pesanan diteruskan ke Finance!')">Beli Sekarang</button>
-              <button class="btn-aksi btn-chat" id="btn-corvette-chat">Chat Penjual</button>
+            <!-- MOBIL 2: GTR -->
+            <div class="card-mobil">
+              <img src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=800&q=80" class="card-img" alt="GTR">
+              <div class="card-body">
+                <h3 class="card-title">Nissan GT-R R35</h3>
+                <div class="card-price">Rp 6.800.000.000</div>
+                <div class="card-footer">
+                  <span class="spek-badge">V6 Twin-Turbo</span>
+                  <button class="btn-detail" 
+                    data-nama="Nissan GT-R R35 Nismo" 
+                    data-harga="Rp 6.8 Milyar" 
+                    data-foto="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=800&q=80" 
+                    data-deskripsi="Dijuluki sang Godzilla. Walaupun kenceng, kata owner showroom sih tetep bagusan Porsche.">Lihat Detail</button>
+                </div>
+              </div>
             </div>
-          </div>
 
+            <!-- MOBIL 3: FERRARI -->
+            <div class="card-mobil">
+              <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80" class="card-img" alt="Ferrari">
+              <div class="card-body">
+                <h3 class="card-title">Ferrari F8 Tributo</h3>
+                <div class="card-price">Rp 12.200.000.000</div>
+                <div class="card-footer">
+                  <span class="spek-badge">710 HP</span>
+                  <button class="btn-detail" 
+                    data-nama="Ferrari F8 Tributo" 
+                    data-harga="Rp 12.2 Milyar" 
+                    data-foto="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80" 
+                    data-deskripsi="Kuda jingkrak dari Italia. Desain eksotis, performa bengis.">Lihat Detail</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
+      <!-- ==============================================
+           2. HALAMAN DETAIL (Bawaan Asli)
+           ============================================== -->
       <div id="sub-detail" style="display: none;">
         <button class="btn-kembali" id="btn-back-katalog">← Kembali ke Katalog</button>
         <div class="wrapper-detail">
@@ -236,9 +340,11 @@
         </div>
       </div>
 
+      <!-- ==============================================
+           3. HALAMAN CHAT WHATSAPP CLONE (Bawaan Asli)
+           ============================================== -->
       <div id="sub-chat" style="display: none;">
         <div class="wa-container">
-          
           <div class="wa-sidebar">
             <div class="wa-sidebar-header">
               <span id="label-tipe-chat">Daftar Chat</span>
@@ -246,7 +352,6 @@
             </div>
             <div class="wa-contact-list" id="list-kontak-wa"></div>
           </div>
-
           <div class="wa-chat-area">
             <div class="wa-chat-header">
               <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150" id="header-chat-avatar" alt="Avatar">
@@ -255,9 +360,7 @@
                 <p id="header-chat-status">Online</p>
               </div>
             </div>
-            
             <div class="wa-chat-body" id="area-pesan-privat"></div>
-            
             <div class="wa-chat-footer">
               <span style="font-size: 24px; color: #8696a0; cursor: pointer;">😊</span>
               <span style="font-size: 24px; color: #8696a0; cursor: pointer; transform: rotate(45deg);">📎</span>
@@ -265,10 +368,12 @@
               <button id="btn-kirim-privat">➤</button>
             </div>
           </div>
-
         </div>
       </div>
 
+      <!-- ==============================================
+           4. HALAMAN SETTINGS AKUN (Bawaan Asli)
+           ============================================== -->
       <div id="sub-settings" style="display: none;">
         <div class="box-settings">
           <h3> Pengaturan Akun & Keamanan</h3>
@@ -285,12 +390,11 @@
           <label>Ganti Password Baru:</label>
           <input type="password" id="set-new-password" class="input-premium" placeholder="Password baru..." />
           <button id="btn-save-password" class="btn-aksi" style="background:#e91e63; color:white;">Ganti Password</button>
+          <br><br>
+          <label>Ganti Username / Nama</label>
+          <input type="text" id="set-new-username" class="input-premium" placeholder="Masukkan nama baru...">
+          <button id="btn-save-username" class="btn-aksi" style="background:#4CAF50; color:white;">Simpan Nama</button>
         </div>
-        <div class="setting-group">
-       <label>Ganti Username / Nama</label>
-       <input type="text" id="set-new-username" placeholder="Masukkan nama baru...">
-         <button id="btn-save-username">Simpan Nama</button>
-      </div>
       </div>
 
     </div>

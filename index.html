@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Showroom Mobil Sport Premium gilak</title>
+  <style>
+    body { background-color: #121212; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+    
+    /* Navbar Modern */
+    .navigasi { display: flex; justify-content: space-between; align-items: center; background-color: #1f1f1f; padding: 10px 40px; position: fixed; width: 100%; top: 0; z-index: 100; box-sizing: border-box; border-bottom: 1px solid #333; }
+    .Logo-brand { font-weight: bold; font-size: 20px; color: #007bff; cursor: pointer; }
+    .nav-kanan { display: flex; align-items: center; gap: 20px; }
+    
+    .btn-logout { background: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .btn-logout:hover { background: #cc0000; }
+
+    /* Menu Profil Dropdown */
+    .profil-wrapper { position: relative; }
+    .avatar-profil { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #007bff; cursor: pointer; transition: 0.2s; }
+    .avatar-profil:hover { transform: scale(1.05); }
+    
+    .dropdown-menu { 
+      display: none; position: absolute; right: 0; top: 55px; background: #1f1f1f; 
+      border: 1px solid #333; border-radius: 8px; width: 220px; box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+      opacity: 0; transform: translateY(-15px); transition: all 0.3s ease; z-index: 200;
+    }
+    .dropdown-menu.tampil { display: block; opacity: 1; transform: translateY(0); }
+    .dropdown-item { padding: 12px 16px; color: #ccc; cursor: pointer; font-size: 14px; border-bottom: 1px solid #2d2d2d; transition: 0.2s; }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: #007bff; color: white; }
+
+    /* Container Utama */
+    .container { max-width: 1200px; margin: 90px auto 50px auto; padding: 20px; }
+    
+    /* Grid Katalog Awal */
+    .katalog { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+    .kartu-mobil { background: #1e1e1e; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; transition: 0.3s; }
+    .kartu-mobil:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,123,255,0.15); }
+    .foto-mobil { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
+    
+    /* Tombol Aksi */
+    .grup-tombol { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+    .btn-aksi { padding: 10px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 13px; transition: 0.2s; text-decoration: none; text-align: center; }
+    .btn-detail { background: #333; color: white; }
+    .btn-beli { background: #ff9800; color: white; }
+    .btn-chat { background: #25d366; color: white; }
+    .btn-aksi:hover { opacity: 0.9; transform: scale(1.02); }
+
+    /* Desain Halaman Detail Premium */
+    .wrapper-detail { background: #1e1e1e; padding: 30px; border-radius: 12px; border: 1px solid #333; margin-top: 20px; }
+    .detail-flex { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 20px; }
+    .detail-kiri { flex: 1; min-width: 300px; }
+    .detail-kanan { flex: 1; min-width: 300px; }
+    .foto-detail-besar { width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; border: 1px solid #444; }
+    .btn-kembali { background: #444; color: white; padding: 8px 15px; border-radius: 6px; border: none; cursor: pointer; margin-bottom: 15px; font-weight: bold; }
+
+    /* DESAIN WHATSAPP REAL CLONE */
+    .wa-container { display: flex; height: 75vh; background: #111b21; border-radius: 12px; overflow: hidden; border: 1px solid #222d34; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .wa-sidebar { width: 35%; background: #111b21; border-right: 1px solid #222d34; display: flex; flex-direction: column; }
+    .wa-sidebar-header { background: #202c33; padding: 15px; font-weight: bold; font-size: 16px; color: #e9edef; display: flex; align-items: center; justify-content: space-between; }
+    .wa-contact-list { overflow-y: auto; flex: 1; }
+    .wa-contact { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid #222d34; cursor: pointer; transition: 0.2s; }
+    .wa-contact:hover { background: #202c33; }
+    .wa-contact.active { background: #2a3942; }
+    .wa-contact img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; margin-right: 15px; background: #333; }
+    .wa-contact-info { flex: 1; min-width: 0; }
+    .wa-contact-info h4 { margin: 0 0 5px 0; font-size: 15px; color: #e9edef; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .wa-contact-info p { margin: 0; font-size: 13px; color: #8696a0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .wa-chat-area { width: 65%; display: flex; flex-direction: column; background: #0b141a; position: relative; }
+    .wa-chat-area::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(#1c2830 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3; z-index: 0; pointer-events: none; }
+    
+    .wa-chat-header { background: #202c33; padding: 10px 20px; display: flex; align-items: center; z-index: 1; border-bottom: 1px solid #2d3a42; }
+    .wa-chat-header img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 15px; background: #333; }
+    .wa-chat-header h4 { margin: 0; color: #e9edef; font-size: 16px; }
+    .wa-chat-header p { margin: 3px 0 0 0; color: #00a884; font-size: 12px; font-weight: bold; }
+    
+    .wa-chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; z-index: 1; }
+    .wa-msg-wrapper { display: flex; width: 100%; margin-bottom: 12px; flex-direction: column; }
+    .wa-msg-wrapper.right { align-items: flex-end; }
+    .wa-msg-wrapper.left { align-items: flex-start; }
+    
+    .wa-message { max-width: 65%; padding: 8px 12px; border-radius: 8px; font-size: 14.5px; color: #e9edef; line-height: 1.4; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.3); word-break: break-word; }
+    .wa-message.sent { background: #005c4b; border-top-right-radius: 0; }
+    .wa-message.received { background: #202c33; border-top-left-radius: 0; }
+    
+    .wa-chat-footer { background: #202c33; padding: 12px 20px; display: flex; gap: 10px; align-items: center; z-index: 1; }
+    .wa-chat-footer input { flex: 1; padding: 12px 20px; border-radius: 24px; border: none; background: #2a3942; color: #e9edef; font-size: 15px; outline: none; }
+    .wa-chat-footer button { background: #00a884; color: #111b21; border: none; padding: 12px 22px; border-radius: 24px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .wa-chat-footer button:hover { background: #00c298; }
+
+    /* Form Settings */
+    .box-settings { max-width: 500px; margin: 40px auto; background: #1e1e1e; padding: 30px; border-radius: 10px; border: 1px solid #333; }
+    .input-premium { width: 90%; padding: 12px; margin-bottom: 15px; background: #2d2d2d; color: white; border: 1px solid #444; border-radius: 6px; }
+  </style>
+</head>
+<body>
+<div id="auth-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background-color: #111b21;">
+  <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+  
+    <div id="view-login" style="display: block; background-color: #1f1f1f; width: 100%; max-width: 400px; padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; margin: 20px; box-sizing: border-box;">
+      <h2 style="color: #fff; margin-top: 0; margin-bottom: 5px; font-size: 24px; font-weight: 600;">Login Aplikasi</h2>
+      <p style="color: #8696a0; font-size: 13px; margin-top: 0; margin-bottom: 25px;">Gunakan Username ATAU Email asli</p>
+      <input type="text" id="login-id" placeholder="Username atau Email" style="width: 100%; padding: 12px 15px; margin-bottom: 15px; background-color: #2a2a2a; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none;">
+      <input type="password" id="login-pass" placeholder="Password" style="width: 100%; padding: 12px 15px; margin-bottom: 20px; background-color: #2a2a2a; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none;">
+      <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+        <button id="tombol-login" style="flex: 1; padding: 12px 0; background-color: #007bff; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s;">Login</button>
+        <button id="link-ke-register" style="flex: 1; padding: 12px 0; background-color: #333; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s;">Daftar Baru</button>
+      </div>
+      <p style="margin: 0; font-size: 13px;"><a href="#" id="link-forgot" style="color: #8696a0; text-decoration: none;">Lupa Password?</a></p>
+    </div>
+
+    <div id="view-register" style="display: none; background-color: #1f1f1f; width: 100%; max-width: 400px; padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; margin: 20px; box-sizing: border-box;">
+      <h2 style="color: #fff; margin-top: 0; margin-bottom: 5px; font-size: 24px; font-weight: 600;">Daftar Akun Baru</h2>
+      <p style="color: #8696a0; font-size: 13px; margin-top: 0; margin-bottom: 25px;">Lengkapi data akun Garasi Sport kamu</p>
+      <input type="text" id="reg-username" placeholder="Bikin Username" style="width: 100%; padding: 12px 15px; margin-bottom: 15px; background-color: #2a2a2a; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none;">
+      <input type="email" id="reg-email" placeholder="Alamat Email Aktif" style="width: 100%; padding: 12px 15px; margin-bottom: 15px; background-color: #2a2a2a; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none;">
+      <input type="password" id="reg-pass" placeholder="Bikin Password (Min 6 Karakter)" style="width: 100%; padding: 12px 15px; margin-bottom: 20px; background-color: #2a2a2a; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none;">
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button id="tombol-daftar" style="flex: 1; padding: 12px 0; background-color: #00a884; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s;">Register</button>
+        <button id="link-ke-login" style="flex: 1; padding: 12px 0; background-color: #333; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s;">Batal</button>
+      </div>
+    </div>
+
+    <div id="view-verification" style="display: none; background-color: #1f1f1f; width: 100%; max-width: 400px; padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; margin: 20px; box-sizing: border-box;">
+      <h2 style="color: #fff; margin-top: 0; margin-bottom: 15px; font-size: 24px; font-weight: 600;">Verifikasi Email</h2>
+      <p style="color: #00a884; font-size: 16px; font-weight: bold; margin-bottom: 10px;">⏳ Menunggu kamu klik link...</p>
+      <p style="color: #8696a0; font-size: 13px; line-height: 1.5; margin-bottom: 25px;">Kami sudah mengirimkan link verifikasi. Silakan cek **Kotak Masuk** atau folder **Spam** email lu. Begitu lu klik link di sana, halaman ini otomatis pindah!</p>
+      <button id="btn-batal-verif" style="width: 100%; padding: 12px 0; background-color: #333; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">Batal / Kembali</button>
+    </div>
+  
+  </div>
+</div>
+
+  <div id="view-aplikasi" style="display: none;">
+    
+    <!-- NAVBAR YANG UDAH DIBENERIN & DITUTUP -->
+    <nav class="navigasi" style="position: fixed; top: 0; left: 0; width: 100vw; height: 70px; display: flex; justify-content: space-between; align-items: center; background-color: #1f1f1f; padding: 0 40px; box-sizing: border-box; z-index: 1000; border-bottom: 1px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+      <div class="Logo-brand" id="brand-home" style="color: #007bff; font-size: 22px; font-weight: 900; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;">GARASI SPORT</div>
+      
+      <div class="nav-kanan" style="display: flex; align-items: center; gap: 20px;">
+        <button id="tombol-logout" class="btn-logout">Logout</button>
+        
+        <div style="display: flex; align-items: center; gap: 12px; border-left: 1px solid #444; padding-left: 20px;">
+          <span id="navbar-username" style="color: #fff; font-weight: bold; font-size: 15px;">Memuat...</span>
+          
+          <div class="profil-wrapper">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" class="avatar-profil" id="btn-avatar" alt="Profil">
+            <div class="dropdown-menu" id="dropdown-box">
+              <div class="dropdown-item" id="drop-chat">Ruang Chat Pribadi</div>
+              <div class="dropdown-item" id="drop-settings">Account Info & Settings</div>
+              <div class="dropdown-item" id="drop-katalog">Kembali ke Katalog</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav> <!-- INI DIA PENUTUPNYA BRAY! -->
+
+    <!-- PENDORONG KONTEN BIAR GAK KETUTUP NAVBAR -->
+    <div style="height: 70px; width: 100%;"></div>
+
+    <div class="container">
+      
+      <div id="sub-katalog">
+        <h2 style="text-align: center; margin-bottom: 30px;">BMW blm adaa wkwk</h2>
+        <div class="katalog">
+          
+          <div class="kartu-mobil">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500" class="foto-mobil">
+            <h3>Porsche 911 GT3</h3>
+            <p style="color: #007bff; font-weight: bold;">when yah</p>
+            <div class="grup-tombol">
+              <button class="btn-aksi btn-detail" 
+                data-nama="Porsche 911 GT3 RS" 
+                data-harga="Rp 4.5 Milyar" 
+                data-foto="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800" 
+                data-deskripsi="Porsche 911 GT3 adalah perwujudan mobil balap murni yang legal digunakan di jalan raya. Dipersenjatai mesin silinder flat-6 berkapasitas 4.0L naturally aspirated, monster ini mampu melontarkan daya sebesar 518 Horsepower. Melesat dari 0 hingga 100 km/jam hanya butuh waktu 3.2 detik dengan raungan mesin khas sirkuit hingga 9.000 RPM!">Lihat Detail</button>
+              <button class="btn-aksi btn-beli" onclick="alert('Pesanan diteruskan ke Finance!')">Beli Sekarang</button>
+              <button class="btn-aksi btn-chat" id="btn-porsche-chat">Chat Penjual</button>
+            </div>
+          </div>
+
+          <div class="kartu-mobil">
+            <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=500" class="foto-mobil">
+            <h3>Nissan GTR R35</h3>
+            <p style="color: #007bff; font-weight: bold;">gasuka </p>
+            <div class="grup-tombol">
+              <button class="btn-aksi btn-detail" 
+                data-nama="Nissan GTR R35 Godzilla" 
+                data-harga="Rp 3.2 Milyar" 
+                data-foto="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800" 
+                data-deskripsi="Dijuluki sebagai sang 'Godzilla' dari Jepang, Nissan GTR R35 mengandalkan mesin Twin-Turbo V6 VR38DETT berkapasitas 3.8 liter yang sangat legendaris. Dilengkapi sistem penggerak pintar ATTESA E-TS All-Wheel Drive, mobil ini sanggup memuntahkan tenaga 565 HP dengan kestabilan cornering yang luar biasa tajam di segala cuaca.">Lihat Detail</button>
+              <button class="btn-aksi btn-beli" onclick="alert('Pesanan diteruskan ke Finance!')">Beli Sekarang</button>
+              <button class="btn-aksi btn-chat" id="btn-gtr-chat">Chat Penjual</button>
+            </div>
+          </div>
+
+          <div class="kartu-mobil">
+            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=500" class="foto-mobil">
+            <h3>Corvette C8</h3>
+            <p style="color: #007bff; font-weight: bold;">apalgi ini,sukanya porsche</p>
+            <div class="grup-tombol">
+              <button class="btn-aksi btn-detail" 
+                data-nama="Chevrolet Corvette C8 Mid-Engine" 
+                data-harga="Rp 2.9 Milyar" 
+                data-foto="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800" 
+                data-deskripsi="Chevrolet Corvette C8 mencetak sejarah baru dengan mengadopsi konfigurasi letak mesin tengah (Mid-Engine) layaknya supercar elit Eropa. Menggendong mesin LT2 6.2L V8 naturally aspirated, C8 memproduksi daya 495 HP. Desain eksteriornya sangat aerodinamis dipadu interior mewah futuristik mirip kokpit pesawat jet tempur siluman.">Lihat Detail</button>
+              <button class="btn-aksi btn-beli" onclick="alert('Pesanan diteruskan ke Finance!')">Beli Sekarang</button>
+              <button class="btn-aksi btn-chat" id="btn-corvette-chat">Chat Penjual</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="sub-detail" style="display: none;">
+        <button class="btn-kembali" id="btn-back-katalog">← Kembali ke Katalog</button>
+        <div class="wrapper-detail">
+          <div class="detail-flex">
+            <div class="detail-kiri">
+              <img src="" id="detail-foto" class="foto-detail-besar" alt="Gambar Mobil">
+            </div>
+            <div class="detail-kanan">
+              <h1 id="detail-nama" style="margin-top:0; color:#007bff;">Nama Mobil</h1>
+              <h2 id="detail-harga" style="color:#ff9800;">Harga Mobil</h2>
+              <p style="font-weight: bold; margin-bottom: 5px; color:#aaa;">Deskripsi & Spesifikasi Unit:</p>
+              <p id="detail-deskripsi" style="line-height:1.7; color:#eee; font-size:15px;">Penjelasan lengkap...</p>
+              <hr style="border-color:#333; margin: 20px 0;">
+              <div style="display: flex; gap: 10px;">
+                <button class="btn-aksi btn-beli" style="flex:1; padding:12px;" onclick="alert('Pesanan diteruskan ke Finance!')">Lanjutkan Pembelian</button>
+                <button class="btn-aksi btn-chat" id="btn-detail-chat" style="flex:1; padding:12px;">Hubungi Sales (Chat)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sub-chat" style="display: none;">
+        <div class="wa-container">
+          
+          <div class="wa-sidebar">
+            <div class="wa-sidebar-header">
+              <span id="label-tipe-chat">Daftar Chat</span>
+              <span style="font-size: 20px; cursor: pointer;">⋮</span>
+            </div>
+            <div class="wa-contact-list" id="list-kontak-wa"></div>
+          </div>
+
+          <div class="wa-chat-area">
+            <div class="wa-chat-header">
+              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150" id="header-chat-avatar" alt="Avatar">
+              <div>
+                <h4 id="header-chat-title">Memuat Obrolan...</h4>
+                <p id="header-chat-status">Online</p>
+              </div>
+            </div>
+            
+            <div class="wa-chat-body" id="area-pesan-privat"></div>
+            
+            <div class="wa-chat-footer">
+              <span style="font-size: 24px; color: #8696a0; cursor: pointer;">😊</span>
+              <span style="font-size: 24px; color: #8696a0; cursor: pointer; transform: rotate(45deg);">📎</span>
+              <input type="text" id="input-pesan-privat" placeholder="Ketik pesan..." />
+              <button id="btn-kirim-privat">➤</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="sub-settings" style="display: none;">
+        <div class="box-settings">
+          <h3> Pengaturan Akun & Keamanan</h3>
+          <p style="font-size:13px; color:#aaa;">Ubah data login kamu langsung terintegrasi ke sistem cloud Firebase.</p>
+          <hr style="border-color: #333; margin-bottom: 20px;">
+          <label>Ganti Foto Profil (URL Gambar):</label>
+          <input type="text" id="set-avatar-url" class="input-premium" placeholder="https://link-foto.com/gambar.jpg" />
+          <button id="btn-save-avatar" class="btn-aksi" style="background:#007bff; color:white; margin-bottom:20px;">Update Foto</button>
+          <br><br>
+          <label>Tautkan Email Baru:</label>
+          <input type="email" id="set-new-email" class="input-premium" placeholder="Email baru..." />
+          <button id="btn-save-email" class="btn-aksi" style="background:#ff9800; color:white; margin-bottom:20px;">Ubah Email</button>
+          <br><br>
+          <label>Ganti Password Baru:</label>
+          <input type="password" id="set-new-password" class="input-premium" placeholder="Password baru..." />
+          <button id="btn-save-password" class="btn-aksi" style="background:#e91e63; color:white;">Ganti Password</button>
+        </div>
+        <div class="setting-group">
+       <label>Ganti Username / Nama</label>
+       <input type="text" id="set-new-username" placeholder="Masukkan nama baru...">
+         <button id="btn-save-username">Simpan Nama</button>
+      </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

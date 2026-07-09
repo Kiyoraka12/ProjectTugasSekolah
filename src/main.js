@@ -525,34 +525,51 @@ if(document.getElementById('link-forgot')) {
     }
   });
 }
-// Ambil elemen dari HTML
+// ✅ PASTE KODE BARU INI ✅
 const waSidebar = document.querySelector('.wa-sidebar');
 const waChatArea = document.querySelector('.wa-chat-area');
 const btnBackChat = document.getElementById('btn-back-chat');
+const listKontakWA = document.getElementById('list-kontak-wa'); 
 
-// 1. Fungsi pas daftar kontak diklik (buka ruang chat)
-waSidebar.addEventListener('click', () => {
-  // Cek apakah ini lagi di layar HP (lebar <= 768px)
-  if (window.innerWidth <= 768) {
-    waSidebar.style.display = 'none';      // Sembunyiin daftar chat
-    waChatArea.style.display = 'flex';     // Munculin obrolan full screen
-  }
-});
+// 1. SOLUSI PENCET KOSONG & GESER: 
+if (listKontakWA) {
+  listKontakWA.addEventListener('click', (e) => {
+    // Kita pake 'closest' biar dia cuma ngerespons kalau yang diklik BENERAN kotak profil orangnya (.wa-contact)
+    const kontakYgDiklik = e.target.closest('.wa-contact');
+    
+    if (kontakYgDiklik) { 
+      if (window.innerWidth <= 768) {
+        waSidebar.style.display = 'none';
+        waChatArea.style.display = 'flex';
+      }
+    }
+  });
+}
 
-// 2. Fungsi pas tombol panah KEMBALI diklik
-btnBackChat.addEventListener('click', () => {
-  waChatArea.style.display = 'none';       // Sembunyiin obrolan
-  waSidebar.style.display = 'flex';        // Munculin lagi daftar chat
-});
-
-// 3. (Opsional) Biar gak nge-bug kalau HP dimiringin / ditarik ke versi laptop
-window.addEventListener('resize', () => {
-  if (window.innerWidth > 768) {
-    waSidebar.style.display = 'flex';
-    waChatArea.style.display = 'flex';
-  } else {
-    waSidebar.style.display = 'flex';
+// 2. FUNGSI TOMBOL KEMBALI
+if (btnBackChat) {
+  btnBackChat.addEventListener('click', () => {
     waChatArea.style.display = 'none';
+    waSidebar.style.display = 'flex';
+  });
+}
+
+// 3. SOLUSI BUG NGETIK MENTAL: Gembok ukuran layar
+let lebarLayarAwal = window.innerWidth;
+
+window.addEventListener('resize', () => {
+  // Kalau lu cuma ngetik (keyboard muncul bikin layar pendek), ABAIKAN!
+  if (window.innerWidth === lebarLayarAwal) return; 
+  
+  // Kalau miringin HP beneran, baru setting layarnya disesuaikan
+  lebarLayarAwal = window.innerWidth;
+  
+  if (window.innerWidth > 768) {
+    if(waSidebar) waSidebar.style.display = 'flex';
+    if(waChatArea) waChatArea.style.display = 'flex';
+  } else {
+    if(waSidebar) waSidebar.style.display = 'flex';
+    if(waChatArea) waChatArea.style.display = 'none';
   }
 });
 

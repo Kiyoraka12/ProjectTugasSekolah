@@ -4,10 +4,9 @@ import {
   onAuthStateChanged, signOut, sendEmailVerification, updateProfile, 
   updatePassword, updateEmail, sendPasswordResetEmail
 } from "firebase/auth";
-// Tambahan getDocs, where, setDoc, doc buat fitur Login pake Username
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, setDoc, doc } from "firebase/firestore";
 
-// 1. CONFIG FIREBASE (Sekarang manggil dari file .env)
+// 1. CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -204,6 +203,8 @@ function renderAplikasiChatWA() {
     if (areaHeaderChat) {
       areaHeaderChat.innerHTML = `
         <div style="display:flex; align-items:center; padding:10px 16px; background-color:#202c33; width:100%;">
+          <button id="btn-back-chat" style="display: none; background: none; border: none; color: white; font-size: 22px; cursor: pointer; margin-right: 15px;">←</button>
+          
           ${renderKomponenAvatar("")}
           <div style="margin-left:15px;">
             <span style="font-weight:bold; color:#fff; display:block; font-size:15px;">Memuat Obrolan sabar jir</span>
@@ -234,6 +235,8 @@ function renderAplikasiChatWA() {
   if (areaHeaderChat) {
     areaHeaderChat.innerHTML = `
       <div style="display:flex; align-items:center; padding:10px 16px; background-color:#202c33; width:100%;">
+        <button id="btn-back-chat" style="display: none; background: none; border: none; color: white; font-size: 22px; cursor: pointer; margin-right: 15px;">←</button>
+        
         ${renderKomponenAvatar(fotoHeader)}
         <div style="margin-left:15px;">
           <span style="font-weight:bold; color:#fff; display:block; font-size:15px;">${namaHeader}</span>
@@ -291,7 +294,7 @@ onAuthStateChanged(auth, (user) => {
     
     if(user.photoURL && btnAvatar) btnAvatar.src = user.photoURL;
       
-      // TAMPILIN NAMA DI NAVBAR (Kalo kosong, pake potongan email)
+      // TAMPILIN NAMA DI NAVBAR
       if(navbarUsername) {
         navbarUsername.innerText = user.displayName || user.email.split('@')[0];
       }
@@ -303,11 +306,9 @@ onAuthStateChanged(auth, (user) => {
       renderAplikasiChatWA();
     });
   } else {
-    // Kalo blm login / blm verifikasi, kunci di area Auth
     if(authContainer) authContainer.style.display = 'block';
     if(viewAplikasi) viewAplikasi.style.display = 'none';
     
-    // JANGAN paksa ke Login kalau user ternyata lagi ngeliat form Register atau halaman Verifikasi bray!
     if (viewLogin.style.display !== 'block' && viewRegister.style.display !== 'block' && viewVerification.style.display !== 'block') {
       viewLogin.style.display = 'block';
       viewRegister.style.display = 'none';
@@ -350,12 +351,7 @@ if (btnSaveUsername) {
     if(namaBaru && namaBaru.value.trim() !== "") {
       updateProfile(auth.currentUser, { displayName: namaBaru.value.trim() }).then(() => {
         alert("Username berhasil diupdate bray!");
-        
-        // --- KODE REAL-TIME UBAH NAMA DI NAVBAR ---
-        if(navbarUsername) {
-          navbarUsername.innerText = namaBaru.value.trim();
-        }
-        
+        if(navbarUsername) navbarUsername.innerText = namaBaru.value.trim();
         renderAplikasiChatWA();
       });
     }
@@ -363,7 +359,7 @@ if (btnSaveUsername) {
 }
 
 // 11. SISTEM REGISTER & DETEKSI OTOMATIS VERIFIKASI
-let intervalVerif = null; // Wadah penampung timer pelacak 
+let intervalVerif = null; 
 
 const tombolDaftar = document.getElementById('tombol-daftar');
 if(tombolDaftar) {
@@ -378,64 +374,43 @@ if(tombolDaftar) {
     }
 
     try {
-      // 1. Buat user baru di Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, regEmail, regPass);
       const userBaru = userCredential.user;
-      
-      // 2. Set Nama profil
       await updateProfile(userBaru, { displayName: regUsername });
-
-      // 3. Simpan data pencarian username ke Firestore
       await setDoc(doc(db, "users_account", userBaru.uid), {
         username: regUsername.toLowerCase(),
         email: regEmail.toLowerCase()
       });
-
-      // 4. Kirim link verifikasi ke email
       await sendEmailVerification(userBaru);
       
-      // 5. Pindahkan layar ke halaman "Tunggu Verifikasi"
       viewRegister.style.display = 'none';
       viewVerification.style.display = 'block';
 
-      // 6. ENGINE DETEKSI OTOMATIS: Cek status email tiap 3 detik
       intervalVerif = setInterval(async () => {
         if (auth.currentUser) {
-          // Paksa Firebase nge-refresh status data user terbaru dari server
           await auth.currentUser.reload(); 
-          
-          // Jika user kedeteksi udah ngeklik link di email spam / inbox-nya
           if (auth.currentUser.emailVerified) {
-            clearInterval(intervalVerif); // Stop cek berkala
+            clearInterval(intervalVerif); 
             alert("✓ Email sukses terverifikasi otomatis bray! Mengalihkan ke halaman login...");
-            
-            await signOut(auth); // Log out sementara biar aman pas masuk form login
+            await signOut(auth); 
             viewVerification.style.display = 'none';
             viewLogin.style.display = 'block';
           }
         }
       }, 3000);
-
-    // ==========================================
-    // BAGIAN DI BAWAH INI YANG BERUBAH BRAY!
-    // ==========================================
     } catch (e) {
       if (e.code === 'auth/email-already-in-use') {
         alert("Email ini udah terdaftar bro! nih gw pindahin ke halaman Login ye.");
-        
-        // Paksa tampilan pindah ke form Login
         if(viewRegister) viewRegister.style.display = 'none';
         if(viewVerification) viewVerification.style.display = 'none';
         if(viewLogin) viewLogin.style.display = 'block';
       } else {
-        // Jika errornya karena hal lain (misal password kurang dari 6 huruf)
         alert("Gagal Daftar: " + e.message);
       }
     }
   });
 }
 
-// Fungsi Tombol Batal di halaman verifikasi
 if(document.getElementById('btn-batal-verif')) {
   document.getElementById('btn-batal-verif').addEventListener('click', async () => {
     if(intervalVerif) clearInterval(intervalVerif);
@@ -457,14 +432,11 @@ if(tombolLogin) {
     }
 
     let emailTarget = loginId;
-
-    // 1. KASIH EFEK LOADING BIAR TAU SISTEM LAGI JALAN
     const teksAsli = tombolLogin.innerText;
     tombolLogin.innerText = "Mengecek data...";
     tombolLogin.disabled = true;
 
     try {
-      // 2. DETEKSI: KALO GAK ADA '@', BERARTI CEK USERNAME
       if (!loginId.includes('@')) {
         const qUser = query(collection(db, "users_account"), where("username", "==", loginId.toLowerCase()));
         const snapUser = await getDocs(qUser);
@@ -478,23 +450,17 @@ if(tombolLogin) {
         emailTarget = snapUser.docs[0].data().email;
       }
 
-      // 3. PROSES TEMBAK KE FIREBASE
       const uc = await signInWithEmailAndPassword(auth, emailTarget, loginPass);
       
-      // 4. CEK STATUS VERIFIKASI EMAIL
       if (!uc.user.emailVerified) {
         alert("⚠️ Waduh, akun lu belom diverifikasi nih! Silakan cek inbox/spam email lu trus klik linknya.");
         await signOut(auth);
       } else {
-        // Kosongin form kalau berhasil login
         document.getElementById('login-id').value = "";
         document.getElementById('login-pass').value = "";
       }
-
     } catch (e) {
-      // 5. DETEKSI ERROR FIREBASE SECARA SPESIFIK
-      console.log("Kode Error Firebase:", e.code); // Buat ngecek di console inspect element
-      
+      console.log("Kode Error Firebase:", e.code);
       if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
         alert("❌ Password lu salah bray! Coba diinget-inget lagi.");
       } else if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-email') {
@@ -505,13 +471,11 @@ if(tombolLogin) {
         alert("❌ Gagal Login: " + e.message);
       }
     }
-
-    // 6. KEMBALIKAN TOMBOL KE SEMULA SETELAH SELESAI
     tombolLogin.innerText = teksAsli;
     tombolLogin.disabled = false;
   });
 }
-// Fitur Tambahan: Lupa Password dll
+
 if(document.getElementById('link-forgot')) {
   document.getElementById('link-forgot').addEventListener('click', (e) => {
     e.preventDefault();
@@ -525,53 +489,57 @@ if(document.getElementById('link-forgot')) {
     }
   });
 }
-// ✅ PASTE KODE BARU INI ✅
-const waSidebar = document.querySelector('.wa-sidebar');
-const waChatArea = document.querySelector('.wa-chat-area');
-const btnBackChat = document.getElementById('btn-back-chat');
-const listKontakWA = document.getElementById('list-kontak-wa'); 
 
-// 1. SOLUSI PENCET KOSONG & GESER: 
-if (listKontakWA) {
-  listKontakWA.addEventListener('click', (e) => {
-    // Kita pake 'closest' biar dia cuma ngerespons kalau yang diklik BENERAN kotak profil orangnya (.wa-contact)
+const btnLogout = document.getElementById('tombol-logout');
+if(btnLogout) btnLogout.addEventListener('click', () => signOut(auth));
+
+// ==========================================
+// 12. LOGIKA TAMPILAN RESPONSIVE & TOMBOL BACK CHAT (PERBAIKAN FINAL)
+// ==========================================
+
+// a. Tangkap klik tombol back dimana aja (Event Delegation anti-badai)
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'btn-back-chat') {
+    const waChatArea = document.querySelector('.wa-chat-area');
+    const waSidebar = document.querySelector('.wa-sidebar');
+    if (waChatArea) waChatArea.style.display = 'none';
+    if (waSidebar) waSidebar.style.display = 'flex';
+  }
+});
+
+// b. Buka obrolan cuma pas klik area .wa-contact yang spesifik
+const listKontakWAGlobal = document.getElementById('list-kontak-wa'); 
+if (listKontakWAGlobal) {
+  listKontakWAGlobal.addEventListener('click', (e) => {
+    // Cari elemen terdekat yang class-nya 'wa-contact' (kontak orangnya beneran)
     const kontakYgDiklik = e.target.closest('.wa-contact');
-    
     if (kontakYgDiklik) { 
+      const waChatArea = document.querySelector('.wa-chat-area');
+      const waSidebar = document.querySelector('.wa-sidebar');
       if (window.innerWidth <= 768) {
-        waSidebar.style.display = 'none';
-        waChatArea.style.display = 'flex';
+        if (waSidebar) waSidebar.style.display = 'none';
+        if (waChatArea) waChatArea.style.display = 'flex';
       }
     }
   });
 }
 
-// 2. FUNGSI TOMBOL KEMBALI
-if (btnBackChat) {
-  btnBackChat.addEventListener('click', () => {
-    waChatArea.style.display = 'none';
-    waSidebar.style.display = 'flex';
-  });
-}
-
-// 3. SOLUSI BUG NGETIK MENTAL: Gembok ukuran layar
+// c. Anti bug layar mental pas keyboard HP muncul
 let lebarLayarAwal = window.innerWidth;
-
 window.addEventListener('resize', () => {
-  // Kalau lu cuma ngetik (keyboard muncul bikin layar pendek), ABAIKAN!
+  // Kalo lebar layar gak berubah (cuma tinggi doang karena keyboard), cuekin aja
   if (window.innerWidth === lebarLayarAwal) return; 
   
-  // Kalau miringin HP beneran, baru setting layarnya disesuaikan
   lebarLayarAwal = window.innerWidth;
+  const waChatArea = document.querySelector('.wa-chat-area');
+  const waSidebar = document.querySelector('.wa-sidebar');
   
   if (window.innerWidth > 768) {
     if(waSidebar) waSidebar.style.display = 'flex';
     if(waChatArea) waChatArea.style.display = 'flex';
   } else {
+    // Mode HP default-nya nutup obrolan nampilin daftar chat
     if(waSidebar) waSidebar.style.display = 'flex';
     if(waChatArea) waChatArea.style.display = 'none';
   }
 });
-
-const btnLogout = document.getElementById('tombol-logout');
-if(btnLogout) btnLogout.addEventListener('click', () => signOut(auth));

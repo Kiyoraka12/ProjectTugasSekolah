@@ -180,46 +180,34 @@
     .btn-detail:hover { background: #0056b3; }
 
     /* =========================================
-       TAMBAHAN FIX RESPONSIVE CHAT HP
-       ========================================= */
-    
-    /* 1. Kunci layar biar gak bisa geser ke samping (anti nyangkut) */
-    body, html {
-      overflow-x: hidden !important;
-      max-width: 100vw;
-    }
+   RESPONSIVE LAYOUT BUAT CHAT WA (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+  /* Bikin wadahnya nurut sama layar HP */
+  .wa-container {
+    display: block !important; 
+    height: calc(100vh - 70px); /* 70px itu tinggi navbar lu */
+  }
 
-    /* 2. Paksa teks chat panjang buat turun ke bawah (gak nembus layar) */
-    .wa-chat-body div, .wa-chat-body p, .wa-chat-body span {
-      word-wrap: break-word !important;
-      overflow-wrap: break-word !important;
-      white-space: pre-wrap !important;
-      max-width: 100%;
-    }
+  /* Sidebar (Daftar Chat) dibikin full screen */
+  .wa-sidebar {
+    width: 100% !important;
+    height: 100%;
+    display: flex; /* Muncul duluan pas buka menu chat */
+  }
 
-    /* 3. Atur layout khusus layar HP (ukuran di bawah 768px) */
-    @media (max-width: 768px) {
-      .wa-container {
-        flex-direction: column !important; /* Tumpuk list kontak di atas, chat di bawah */
-        height: 85vh !important; 
-      }
-      .wa-sidebar {
-        width: 100% !important;
-        height: 35% !important; /* List kontak ngambil 35% layar atas */
-        border-right: none !important;
-        border-bottom: 2px solid #333;
-      }
-      .wa-chat-area {
-        width: 100% !important;
-        height: 65% !important; /* Area chat ngambil 65% layar bawah */
-      }
-      .wa-chat-footer input {
-        width: 60% !important; /* Benerin kolom ketik biar gak kepanjangan */
-      }
-      .wa-chat-footer {
-        padding: 10px !important;
-      }
-    }
+  /* Ruang obrolan (Chat Area) disembunyiin dulu */
+  .wa-chat-area {
+    width: 100% !important;
+    height: 100%;
+    display: none; /* Sembunyi sebelum kontak diklik */
+  }
+
+  /* Munculin tombol panah back */
+  #btn-back-chat {
+    display: block !important;
+  }
+}
   </style>
 </head>
 <body>
@@ -396,12 +384,14 @@
           </div>
           <div class="wa-chat-area">
             <div class="wa-chat-header">
-              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150" id="header-chat-avatar" alt="Avatar">
-              <div>
-                <h4 id="header-chat-title">Memuat Obrolan...</h4>
-                <p id="header-chat-status">Online</p>
-              </div>
-            </div>
+  <button id="btn-back-chat" style="display: none; background: none; border: none; color: white; font-size: 22px; cursor: pointer; margin-right: 15px;">←</button>
+  
+  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150" id="header-chat-avatar" alt="Avatar">
+  <div>
+    <h4 id="header-chat-title">Memuat Obrolan...</h4>
+    <p id="header-chat-status">Online</p>
+  </div>
+</div>
             <div class="wa-chat-body" id="area-pesan-privat"></div>
             <div class="wa-chat-footer">
               <span style="font-size: 24px; color: #8696a0; cursor: pointer;">😊</span>

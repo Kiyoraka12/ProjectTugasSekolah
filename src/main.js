@@ -525,6 +525,36 @@ if(document.getElementById('link-forgot')) {
     }
   });
 }
+// Ambil elemen dari HTML
+const waSidebar = document.querySelector('.wa-sidebar');
+const waChatArea = document.querySelector('.wa-chat-area');
+const btnBackChat = document.getElementById('btn-back-chat');
+
+// 1. Fungsi pas daftar kontak diklik (buka ruang chat)
+waSidebar.addEventListener('click', () => {
+  // Cek apakah ini lagi di layar HP (lebar <= 768px)
+  if (window.innerWidth <= 768) {
+    waSidebar.style.display = 'none';      // Sembunyiin daftar chat
+    waChatArea.style.display = 'flex';     // Munculin obrolan full screen
+  }
+});
+
+// 2. Fungsi pas tombol panah KEMBALI diklik
+btnBackChat.addEventListener('click', () => {
+  waChatArea.style.display = 'none';       // Sembunyiin obrolan
+  waSidebar.style.display = 'flex';        // Munculin lagi daftar chat
+});
+
+// 3. (Opsional) Biar gak nge-bug kalau HP dimiringin / ditarik ke versi laptop
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    waSidebar.style.display = 'flex';
+    waChatArea.style.display = 'flex';
+  } else {
+    waSidebar.style.display = 'flex';
+    waChatArea.style.display = 'none';
+  }
+});
 
 const btnLogout = document.getElementById('tombol-logout');
 if(btnLogout) btnLogout.addEventListener('click', () => signOut(auth));

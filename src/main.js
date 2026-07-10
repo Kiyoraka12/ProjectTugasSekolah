@@ -192,7 +192,7 @@ function renderAplikasiChatWA() {
       <div class="wa-contact active" style="display:flex; align-items:center; padding:10px;">
         ${renderKomponenAvatar(fotoAdmin)}
         <div class="wa-contact-info" style="margin-left:10px;">
-          <h4 style="margin:0; font-size:15px; color:#fff;">Admin Garasi Sport ⭐</h4>
+          <h4 style="margin:0; font-size:15px; color:#fff;">Kiyoraka</h4>
           <p style="margin:3px 0 0 0; font-size:13px; color:#8696a0;">${teksTerakhir}</p>
         </div>
       </div>

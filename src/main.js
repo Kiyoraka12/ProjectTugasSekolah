@@ -462,13 +462,13 @@ if(tombolLogin) {
     } catch (e) {
       console.log("Kode Error Firebase:", e.code);
       if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-        alert("❌ Password lu salah bray! Coba diinget-inget lagi.");
+        alert("Password Salah.");
       } else if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-email') {
-        alert("❌ Email ini belum terdaftar atau formatnya salah!");
+        alert("Email ini belum terdaftar atau formatnya salah!");
       } else if (e.code === 'auth/too-many-requests') {
-        alert("⛔ Buset, lu terlalu sering masukin password salah. Sistem dikunci sementara, tunggu beberapa menit ya!");
+        alert("Jangan Terlalu sering masukin password salah. Sistem dikunci sementara, tunggu beberapa menit ya!");
       } else {
-        alert("❌ Gagal Login: " + e.message);
+        alert("Gagal Login: " + e.message);
       }
     }
     tombolLogin.innerText = teksAsli;

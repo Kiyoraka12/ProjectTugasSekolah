@@ -400,7 +400,7 @@ if(tombolDaftar) {
       }, 3000);
     } catch (e) {
       if (e.code === 'auth/email-already-in-use') {
-        alert("Email ini udah terdaftar bro! nih gw pindahin ke halaman Login ye.");
+        alert("Email Sudah Terdaftar. Pindah Ke Halaman Login");
         if(viewRegister) viewRegister.style.display = 'none';
         if(viewVerification) viewVerification.style.display = 'none';
         if(viewLogin) viewLogin.style.display = 'block';
@@ -427,7 +427,7 @@ if(tombolLogin) {
     const loginPass = document.getElementById('login-pass').value.trim();
 
     if(loginId === "" || loginPass === "") {
-      alert("⚠️ Isi Username/Email sama Passwordnya dulu bray!");
+      alert("Isi Username/Email sama Passwordnya dulu bray!");
       return;
     }
 

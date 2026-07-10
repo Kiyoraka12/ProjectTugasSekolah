@@ -217,7 +217,7 @@ function renderAplikasiChatWA() {
     return;
   }
 
-  let namaHeader = "Admin Garasi Sport ⭐";
+  let namaHeader = "Kiyoraka";
   let fotoHeader = "";
   const pesanKamarTerpilih = semuaPesanMaster.filter(msg => msg.roomChannel === chatTerpilih);
 
